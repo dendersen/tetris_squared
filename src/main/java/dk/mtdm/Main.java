@@ -1,7 +1,9 @@
 package dk.mtdm;
 
+import processing.core.PApplet;
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        PApplet sketch = new Sketch();
+        PApplet.runSketch(new String[]{"window"},sketch);
     }
 }

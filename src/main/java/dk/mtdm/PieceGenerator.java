@@ -1,7 +1,5 @@
 package dk.mtdm;
 
-import dk.mtdm.SubSquare.Shape;
-
 public class PieceGenerator {
   int maxValue = 7 + (int) (5 * Math.random());
   int currentPiece = (int) (Math.random() * maxValue);
@@ -21,6 +19,6 @@ public class PieceGenerator {
       val += skipValue;
       val %= maxValue;
     }
-    return val;
+    return val%Shape.values().length;
   }
 }
