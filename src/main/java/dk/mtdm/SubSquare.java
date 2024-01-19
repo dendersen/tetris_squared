@@ -14,12 +14,13 @@ public class SubSquare {
   }
 
   public void draw(PGraphics g, int indexWidth) {
+    g.fill(form.color.getRed(),form.color.getGreen(),form.color.getBlue());
+    g.strokeWeight(3);
+    g.stroke(Math.max(form.color.getRed()-20,0),Math.max(form.color.getGreen()-20,0),Math.max(form.color.getBlue()-20,0));
     for (int i = 0; i < build.length; i++) {
       for (int j = 0; j < build[i].length; j++) {
         if(build[i][j]){
-          g.fill(form.color.getRed(),form.color.getGreen(),form.color.getBlue());
-          g.stroke(Math.max(form.color.getRed()-20,0),Math.max(form.color.getGreen()-20,0),Math.max(form.color.getBlue()-20,0));
-          g.rect(indexWidth * (x+i),indexWidth * (y+j),indexWidth,indexWidth);
+          g.rect(indexWidth * (x+i)+2,indexWidth * (y+j)+2,indexWidth-4,indexWidth-4);
         }
       }
     }

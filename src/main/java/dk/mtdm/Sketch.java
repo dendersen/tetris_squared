@@ -25,10 +25,19 @@ public class Sketch extends PApplet {
         g.rect(indexWidth * x, indexWidth * y, indexWidth, indexWidth);
       }
     }
+
     if(makePiece){
       creator();
     }else{
       mover();
+    }
+    for (int x = 0; x < SubMap.length; x++) {
+      for (int y = 0; y < SubMap[x].length; y++) {
+        stroke(0, 0, 0, 20);
+        strokeWeight(1);
+        line(0, y*indexWidth, worldWidth*indexWidth, y*indexWidth);
+        line(x*indexWidth, 0, x*indexWidth, worldHeight*indexWidth);
+      }
     }
   }
   
