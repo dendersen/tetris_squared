@@ -11,7 +11,7 @@ public class PieceGenerator {
     return temp;
   }
   public SubSquare getPiece(int index) {
-    return new SubSquare(Shape.values()[generatePiece(index)],0,0);
+    return new SubSquare(Shape.values()[generatePiece(index)],5,0);
   }
   private int generatePiece(int index) {
     int val = currentPiece;
