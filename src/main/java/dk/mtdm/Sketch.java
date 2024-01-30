@@ -14,6 +14,7 @@ public class Sketch extends PApplet {
   PieceGenerator pg = new PieceGenerator();
 
   public void draw(){
+    clearLines();
     background(255);
     for (int x = 0; x < SubMap.length; x++) {
       for (int y = 0; y < SubMap[x].length; y++) {
@@ -32,12 +33,32 @@ public class Sketch extends PApplet {
     }else{
       mover();
     }
+    drawGrid();
+  }
+  public void drawGrid(){
     for (int x = 0; x < SubMap.length; x++) {
       for (int y = 0; y < SubMap[x].length; y++) {
         stroke(0, 0, 0, 20);
         strokeWeight(1);
         line(0, y*indexWidth, worldWidth*indexWidth, y*indexWidth);
         line(x*indexWidth, 0, x*indexWidth, worldHeight*indexWidth);
+      }
+    }
+  }
+
+  public void clearLines(){
+    for (int y = 0; y < SubMap[0].length; y++) {
+      boolean clear = SubMap[0][y] != null;
+      for (int x = 1; x < SubMap.length && clear; x++) {
+        clear &= SubMap[x][y] != null;
+      }
+      if(clear){
+        for (int i = 0; i < SubMap.length; i++) {
+          for (int j = y; j > 0; j--) {
+            SubMap[i][j] = SubMap[i][j-1];
+          }
+          SubMap[i][0] = null;
+        }
       }
     }
   }
