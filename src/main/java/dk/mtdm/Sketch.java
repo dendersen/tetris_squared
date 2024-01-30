@@ -20,9 +20,10 @@ public class Sketch extends PApplet {
         if(SubMap[x][y] == null){
           continue;
         }
+        g.strokeWeight(3);
         g.fill(SubMap[x][y].getRed(), SubMap[x][y].getGreen(), SubMap[x][y].getBlue());
         g.stroke(Math.max(SubMap[x][y].getRed()-20, 0), Math.max(SubMap[x][y].getGreen()-20, 0), Math.max(SubMap[x][y].getBlue()-20, 0));
-        g.rect(indexWidth * x, indexWidth * y, indexWidth, indexWidth);
+        g.rect(indexWidth * x + 2,indexWidth * y + 2,indexWidth - 4,indexWidth - 4);
       }
     }
 
