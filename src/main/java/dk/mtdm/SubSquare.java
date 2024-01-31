@@ -3,16 +3,15 @@ package dk.mtdm;
 import processing.core.PGraphics;
 
 public class SubSquare {
-  Shape form;
-  int x,y;
-  boolean[][] build;
+  protected Shape form;
+  protected int x,y;
+  protected boolean[][] build;
   public SubSquare(Shape form,int x,int y) {
     this.form = form;
-    build = form.build;
+    this.build = form.build;
     this.x = x;
     this.y = y;
   }
-
   public void draw(PGraphics g, int indexWidth) {
     g.fill(form.color.getRed(),form.color.getGreen(),form.color.getBlue());
     g.strokeWeight(3);
@@ -41,7 +40,6 @@ public class SubSquare {
       }
     }
   }
-
   public void moveLeft(Color[][] map) {
     this.x--;
     if(collides(map)){
@@ -87,14 +85,12 @@ public class SubSquare {
   public int getHeight() {
     return build[0].length;
   }
-
   public boolean willCollide(Color[][] map) {
     y++;
     boolean collide = collides(map);
     y--;
     return collide;
   }
-
   public boolean collides(Color[][] map) {
     for (int i = 0; i < build.length; i++) {
       for (int j = 0; j < build[i].length; j++) {
@@ -108,5 +104,4 @@ public class SubSquare {
     }
     return false;
   }
-
 }

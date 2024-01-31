@@ -3,19 +3,17 @@ package dk.mtdm;
 import processing.core.PApplet;
 
 public class Sketch extends PApplet {
-  int worldHeight = 20, worldWidth = 10;
+  private int worldHeight = 20, worldWidth = 10;
   private int gravityTimer = 0;
-  final int indexWidth = 20;
-  Color[][] SubMap = new Color[worldWidth][worldHeight];
-  Color[][] topMap = new Color[worldWidth*3][worldHeight*3];
-  boolean[][] lockMap;
-  boolean makePiece = true;
-  SubSquare activePiece;
-  PieceGenerator pg = new PieceGenerator();
+  private final int indexWidth = 20;
+  private Color[][] SubMap = new Color[worldWidth][worldHeight];
+  private Color[][] topMap = new Color[worldWidth*3][worldHeight*3];
+  private boolean makePiece = true;
+  private SubSquare activePiece;
+  private PieceGenerator pg = new PieceGenerator();
   
   public void draw(){
     Color[][] map = makePiece ? SubMap : topMap;
-    clearLines(map);
     background(255);
     for (int x = 0; x < map.length; x++) {
       for (int y = 0; y < map[x].length; y++) {
@@ -40,8 +38,8 @@ public class Sketch extends PApplet {
       for (int y = 0; y < map[x].length; y++) {
         stroke(0, 0, 0, 20);
         strokeWeight(1);
-        line(0, y*indexWidth, worldWidth*indexWidth, y*indexWidth);
-        line(x*indexWidth, 0, x*indexWidth, worldHeight*indexWidth);
+        line(0, y*indexWidth, map.length*indexWidth, y*indexWidth);
+        line(x*indexWidth, 0, x*indexWidth, map[0].length*indexWidth);
       }
     }
   }
@@ -65,7 +63,7 @@ public class Sketch extends PApplet {
   
   @Override
   public void settings() {
-    size(worldWidth*indexWidth * (makePiece ? 1 : 3),worldHeight*indexWidth * (makePiece ? 1 : 3));
+    size(worldWidth*indexWidth * 3, worldHeight*indexWidth *  3);
   }
   
   public void keyPressed(){
@@ -74,21 +72,21 @@ public class Sketch extends PApplet {
     }
     gravityTimer = 1;
     if(keyCode == LEFT){
-      activePiece.moveLeft(SubMap);
+      activePiece.moveLeft(makePiece ? SubMap : topMap);
     }
     if(keyCode == RIGHT){
-      activePiece.moveRight(SubMap);
+      activePiece.moveRight(makePiece ? SubMap : topMap);
     }
     if(keyCode == UP){
-      activePiece.rotateLeft(SubMap);
+      activePiece.rotateLeft(makePiece ? SubMap : topMap);
     }
     if(keyCode == DOWN){
       try{
         aplyGravity(makePiece ? SubMap : topMap);
       }catch(RuntimeException e){
         if(makePiece){
-          SubMap = null;
-          makePiece = false;
+          SubMap = newSubmap(pg.popPiece());
+          makePiece ^= true;
           settings();
         }else{
           throw e;
@@ -97,6 +95,10 @@ public class Sketch extends PApplet {
     }
   }
   
+  private Color[][] newSubmap(SubSquare popPiece) {
+    Color[][] temp = new Color[popPiece.build.length*5][popPiece.build[0].length*5];
+    return temp;
+  }
   private void creator() {
     if(activePiece == null){
       activePiece = pg.popPiece();
@@ -104,7 +106,13 @@ public class Sketch extends PApplet {
       return;
     }
     if(gravityTimer == 0){
-      aplyGravity(SubMap);
+      try{
+        aplyGravity(SubMap);
+      }catch(RuntimeException e){
+        makePiece = false;
+        activePiece = new SubMap(10, 10, SubMap);
+        return;
+      }
     }
     if(activePiece != null){
       activePiece.draw(g, indexWidth);
@@ -118,9 +126,12 @@ public class Sketch extends PApplet {
     }
     if(activePiece.y+activePiece.getHeight()+1 > worldHeight || activePiece.willCollide(map)){
       activePiece.Place(map);
+      clearLines(map);
       activePiece.draw(g, indexWidth);
       activePiece = null;
-      makePiece = true;
+      if(!makePiece){
+        makePiece = true;
+      }
       return;
     }
     activePiece.gravity();
@@ -133,7 +144,12 @@ public class Sketch extends PApplet {
   
   private void mover() {
     if(gravityTimer == 0){
-      aplyGravity(topMap);
+      try{
+        aplyGravity(topMap);
+      }catch(RuntimeException e){
+        System.out.println("Game Over");
+        noLoop();
+      }
     }
     if(activePiece != null){
       activePiece.draw(g, indexWidth);

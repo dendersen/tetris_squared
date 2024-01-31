@@ -7,7 +7,8 @@ public enum Color{
   green(0,255,0),
   orange(255,100,0),
   darkBlue(0,0,200),
-  purple(255,0,255);
+  purple(255,0,255),
+  LOCKED(0,0,0);
   
   private final int r,g,b;
   
